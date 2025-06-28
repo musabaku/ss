@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Wishes & Memories for Sara Samreen & Yasir Mohammed</title>
+    <title>Wedding Wishes & Memories for Aisha & Omar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -30,37 +30,39 @@
             background: #fff; padding: 2.5rem; border-radius: 1rem; max-width: 500px; width: 90%;
             position: relative; transform: scale(0.9); transition: transform 0.4s ease;
         }
-        .modal-content.photo-modal { max-width: 90vw; max-height: 90vh; padding: 1rem; } /* Style for photo modal */
+        .modal-content.photo-modal { max-width: 90vw; max-height: 90vh; padding: 1rem; }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .bismillah { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #b89e78; }
         .fab { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; }
         .gallery-img-container { cursor: pointer; }
-        .gallery-img { 
-            transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        }
+        .gallery-img { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .gallery-img-container:hover .gallery-img { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         #loader { border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8);
-            display: flex; justify-content: center; align-items: center; z-index: 2000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000;
+        }
+        /* Custom file input styles */
+        input[type="file"]::file-selector-button {
+            @apply font-bold bg-amber-500 hover:bg-amber-600 text-white py-2 px-4 rounded-lg cursor-pointer transition-colors;
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <div id="loading-overlay" class="loading-overlay"><div id="loader"></div></div>
+    <div id="loading-overlay" class="loading-overlay hidden"><div id="loader"></div><p id="loading-text" class="mt-4 font-semibold text-gray-700"></p></div>
 
     <div class="container mx-auto px-4 py-8">
         <header class="text-center mb-8">
-            <h1 class="header-title text-5xl md:text-6xl text-emerald-800">Sara Samreen & Yasir Mohammed</h1>
-            <p class="text-lg text-gray-600 mt-2">Joined in Nikah | July 05, 2025</p>
+            <h1 class="header-title text-5xl md:text-6xl text-emerald-800">Sara Samreen & ?</h1>
+            <p class="text-lg text-gray-600 mt-2">Joined in Nikah | June 28, 2025</p>
             <p class="text-md text-gray-500 mt-4 max-w-2xl mx-auto">Welcome to our virtual guestbook. Share your joy by adding a wish or a cherished photo. All contributions are saved and shared in real-time.</p>
         </header>
         <div id="bubble-container" class="bubble-container w-full max-w-5xl mx-auto"></div>
         <button id="add-wish-btn" class="fab bg-emerald-600 hover:bg-emerald-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg text-3xl">+</button>
         <section id="art-gallery" class="mt-16 text-center">
-            <h2 class="header-title text-4xl text-emerald-800 mb-4">Humour - Art - Memories</h2>
+            <h2 class="header-title text-4xl text-emerald-800 mb-4">Our Memories</h2>
             <div class="flex justify-center mb-8">
                 <button id="add-photo-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add a Photo</button>
             </div>
@@ -69,8 +71,24 @@
     </div>
 
     <div id="message-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><div class="text-center"><p class="bismillah mb-4">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p><p id="modal-message" class="text-gray-700 text-lg leading-relaxed mb-6"></p><h3 id="modal-name" class="font-bold text-xl text-emerald-700"></h3><div id="delete-container" class="mt-6"></div></div></div></div>
-    <div id="add-wish-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-emerald-800">Share Your Well Wishes</h2><form id="wish-form"><div class="mb-4"><label for="contributor-name" class="block text-gray-700 text-sm font-bold mb-2">Your Name:</label><input type="text" id="contributor-name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="mb-6"><label for="contributor-message" class="block text-gray-700 text-sm font-bold mb-2">Your Message:</label><textarea id="contributor-message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea></div><div class="text-center"><button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Wish</button></div></form></div></div>
-    <div id="add-photo-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-amber-800">Add a Photo to the Gallery</h2><form id="photo-form"><div class="mb-4"><label for="image-url" class="block text-gray-700 text-sm font-bold mb-2">Image URL:</label><input type="url" id="image-url" name="url" placeholder="https://example.com/image.jpg" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="text-center"><button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Photo</button></div></form></div></div>
+    <div id="add-wish-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-emerald-800">Share Your Well Wishes</h2><form id="wish-form"><div class="mb-4"><label for="contributor-name" class="block text-gray-700 text-sm font-bold mb-2">Your Name:</label><input type="text" id="contributor-name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="mb-6"><label for="contributor-message" class="block text-gray-700 text-sm font-bold mb-2">Your Message:</label><textarea id="contributor-message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea></div><div class="text-center"><button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">Add Wish</button></div></form></div></div>
+    
+    <!-- MODIFIED: "Add Photo" Modal for File Upload -->
+    <div id="add-photo-modal" class="modal-overlay">
+        <div class="modal-content shadow-2xl">
+            <button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-center mb-6 text-amber-800">Add a Photo to the Gallery</h2>
+            <form id="photo-form">
+                <div class="mb-4">
+                    <label for="image-file" class="block text-gray-700 text-sm font-bold mb-2">Select an image:</label>
+                    <input type="file" id="image-file" name="file" class="w-full text-gray-700" accept="image/*" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md">Upload Photo</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <div id="photo-display-modal" class="modal-overlay">
         <div class="modal-content photo-modal shadow-2xl">
@@ -80,7 +98,6 @@
         </div>
     </div>
     
-    <!-- NEW: Password Prompt Modal -->
     <div id="password-modal" class="modal-overlay">
         <div class="modal-content shadow-2xl">
             <button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
@@ -89,11 +106,11 @@
             <form id="password-form">
                 <div class="mb-4">
                     <label for="admin-password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
-                    <input type="password" id="admin-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <input type="password" id="admin-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" required>
                     <p id="password-error" class="text-red-500 text-xs italic mt-2 hidden">Incorrect Password.</p>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md">Confirm Delete</button>
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg">Confirm Delete</button>
                 </div>
             </form>
         </div>
@@ -101,16 +118,16 @@
 
 
     <script type="module">
-        // Import Firebase modules
+        // Import Firebase modules, including Storage
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // --- CONFIGURATION ---
-        const adminPassword = 'th17'; // Hardcoded admin password
+        const adminPassword = 'th17';
 
-        // --- ELEMENTS ---
         const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
         const bubbleContainer = document.getElementById('bubble-container');
         const galleryGrid = document.getElementById('gallery-grid');
         const addWishBtn = document.getElementById('add-wish-btn');
@@ -119,7 +136,7 @@
         const addWishModal = document.getElementById('add-wish-modal');
         const addPhotoModal = document.getElementById('add-photo-modal');
         const photoDisplayModal = document.getElementById('photo-display-modal');
-        const passwordModal = document.getElementById('password-modal'); // NEW
+        const passwordModal = document.getElementById('password-modal');
         const modalMessageEl = document.getElementById('modal-message');
         const modalNameEl = document.getElementById('modal-name');
         const deleteContainer = document.getElementById('delete-container');
@@ -127,18 +144,16 @@
         const photoDeleteContainer = document.getElementById('photo-delete-container');
         const wishForm = document.getElementById('wish-form');
         const photoForm = document.getElementById('photo-form');
-        const passwordForm = document.getElementById('password-form'); // NEW
-        const passwordError = document.getElementById('password-error'); // NEW
+        const passwordForm = document.getElementById('password-form');
+        const passwordError = document.getElementById('password-error');
         const closeButtons = document.querySelectorAll('.close-modal');
 
         const animatedBubbles = new Map();
         const renderedPhotos = new Map();
 
-        // --- STATE VARIABLES ---
         let itemToDelete = null;
         let deleteType = null;
 
-        // --- BUBBLE COLORS ---
         const colors = [
             { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' },
             { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' },
@@ -146,8 +161,7 @@
             { bg: 'bg-rose-100', text: 'text-rose-800', border: 'border-rose-300' }
         ];
         
-        // --- FIREBASE SETUP ---
-        let db, auth, wishesCol, photosCol;
+        let db, auth, storage, wishesCol, photosCol;
         
         async function initializeFirebase() {
             try {
@@ -160,16 +174,12 @@
                   appId: "1:722685599054:web:1da8f88d518880f015521f",
                   measurementId: "G-CV7Q7T2L52"
                 };
-                const appId = 'default-wedding-app-v2';
+                const appId = 'ss-virtual-3b84c-guestbook';
 
-                if (!firebaseConfig.apiKey) {
-                    loadingOverlay.innerHTML = "<h2>Firebase configuration not found.</h2>";
-                    return;
-                }
-                
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app); 
+                storage = getStorage(app); // Initialize Storage
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
@@ -181,19 +191,15 @@
                     }
                 });
 
-                try {
-                    await signInAnonymously(auth);
-                } catch (error) {
-                    console.error("Anonymous sign-in failed", error);
-                }
+                await signInAnonymously(auth);
 
             } catch (error) {
                 console.error("Error initializing Firebase:", error);
-                loadingOverlay.innerHTML = `<h2>Error: ${error.message}</h2>`;
+                loadingOverlay.classList.remove('hidden');
+                loadingText.textContent = `Error: ${error.message}`;
             }
         }
 
-        // --- REAL-TIME LISTENERS ---
         function listenForWishes() {
             onSnapshot(wishesCol, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
@@ -205,7 +211,7 @@
                         animatedBubbles.delete(wishId);
                     }
                 });
-                loadingOverlay.style.display = 'none';
+                loadingOverlay.classList.add('hidden');
             });
         }
 
@@ -216,18 +222,17 @@
                      const photoId = change.doc.id;
                      if (change.type === "added" && !renderedPhotos.has(photoId)) createImage(photoData, photoId);
                      if (change.type === "removed" && renderedPhotos.has(photoId)) {
-                         renderedPhotos.get(photoId).remove();
+                         renderedPhotos.get(photoId).element.remove();
                          renderedPhotos.delete(photoId);
                      }
                 });
             });
         }
         
-        // --- DELETE FUNCTIONS ---
-        function requestDelete(id, type) {
-            itemToDelete = id;
+        function requestDelete(id, type, storagePath = null) {
+            itemToDelete = { id, storagePath };
             deleteType = type;
-            passwordError.classList.add('hidden'); // Hide previous errors
+            passwordError.classList.add('hidden');
             openModal(passwordModal);
         }
 
@@ -235,21 +240,26 @@
             if (!itemToDelete || !deleteType) return;
             
             const collectionRef = deleteType === 'wish' ? wishesCol : photosCol;
-            const itemRef = doc(db, collectionRef.path, itemToDelete);
+            const itemRef = doc(db, collectionRef.path, itemToDelete.id);
 
             try {
-                await deleteDoc(itemRef);
+                // If it's a photo, delete from Storage first
+                if (deleteType === 'photo' && itemToDelete.storagePath) {
+                    const photoStorageRef = ref(storage, itemToDelete.storagePath);
+                    await deleteObject(photoStorageRef);
+                }
+                
+                await deleteDoc(itemRef); // Then delete from Firestore
+                
                 const activeModal = document.querySelector('.modal-overlay.active');
                 if (activeModal) closeModal(activeModal);
-            } catch (error) {
-                console.error(`Error deleting ${deleteType}:`, error);
-            } finally {
+            } catch (error) { console.error(`Error deleting ${deleteType}:`, error); }
+            finally {
                 itemToDelete = null;
                 deleteType = null;
             }
         }
 
-        // --- UI FUNCTIONS ---
         function createBubble(msg, id) {
             const bubble = document.createElement('div');
             const size = Math.random() * (150 - 90) + 90;
@@ -267,13 +277,11 @@
                 modalMessageEl.textContent = msg.message;
                 modalNameEl.textContent = `— ${msg.name}`;
                 deleteContainer.innerHTML = '';
-                
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete Wish';
                 deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg';
                 deleteBtn.onclick = () => requestDelete(id, 'wish');
                 deleteContainer.appendChild(deleteBtn);
-                
                 openModal(displayModal);
             });
             bubbleContainer.appendChild(bubble);
@@ -296,13 +304,11 @@
             imgContainer.addEventListener('click', () => {
                 modalPhotoImg.src = photoData.url;
                 photoDeleteContainer.innerHTML = ''; 
-
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete Photo';
                 deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg';
-                deleteBtn.onclick = () => requestDelete(id, 'photo');
+                deleteBtn.onclick = () => requestDelete(id, 'photo', photoData.storagePath); // Pass storage path for deletion
                 photoDeleteContainer.appendChild(deleteBtn);
-                
                 openModal(photoDisplayModal);
             });
 
@@ -313,7 +319,6 @@
         function openModal(modal) { modal.classList.add('active'); }
         function closeModal(modal) { modal.classList.remove('active'); }
 
-        // --- EVENT LISTENERS ---
         addWishBtn.addEventListener('click', () => openModal(addWishModal));
         addPhotoBtn.addEventListener('click', () => openModal(addPhotoModal));
         closeButtons.forEach(btn => btn.addEventListener('click', (e) => closeModal(e.target.closest('.modal-overlay'))));
@@ -338,20 +343,46 @@
 
         photoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const fileInput = document.getElementById('image-file');
+            const file = fileInput.files[0];
+            if (!file) { return; }
+
             const submitBtn = photoForm.querySelector('button[type="submit"]');
-            submitBtn.disabled = true; submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
+            loadingOverlay.classList.remove('hidden');
+            loadingText.textContent = 'Uploading Photo...';
+
             try {
+                // Create a unique path for the file in Storage
+                const storagePath = `images/${Date.now()}_${file.name}`;
+                const storageRef = ref(storage, storagePath);
+
+                // Upload the file
+                const snapshot = await uploadBytes(storageRef, file);
+                
+                // Get the public URL
+                const downloadURL = await getDownloadURL(snapshot.ref);
+
+                // Save the URL and path to Firestore
                 await addDoc(photosCol, {
-                    url: photoForm.url.value, createdAt: serverTimestamp(),
+                    url: downloadURL,
+                    storagePath: storagePath, // Save path for deletion
+                    createdAt: serverTimestamp(),
                     userId: auth.currentUser.uid
                 });
+
                 photoForm.reset();
                 closeModal(addPhotoModal);
-            } catch (error) { console.error("Error adding photo: ", error); }
-            finally { submitBtn.disabled = false; submitBtn.textContent = 'Add Photo'; }
+            } catch (error) {
+                console.error("Error uploading photo: ", error);
+                alert("Photo upload failed. Please try again.");
+            } finally {
+                submitBtn.disabled = false;
+                loadingOverlay.classList.add('hidden');
+                loadingText.textContent = '';
+            }
         });
 
-        // NEW: Password form submission handler
         passwordForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const enteredPassword = passwordForm.querySelector('#admin-password').value;

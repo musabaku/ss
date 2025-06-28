@@ -7,12 +7,47 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* Base styles and background */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #fdfaf6;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23d4c7b0' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0h1v5h5v1H6v5H5V6H0V5h5z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         .header-title { font-family: 'Playfair Display', serif; }
+
+        /* --- NEW: Welcome Banner --- */
+        #welcome-banner {
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.8s ease;
+        }
+        #welcome-banner.hide {
+            transform: translateY(-150%);
+            opacity: 0;
+        }
+
+        /* --- NEW: Falling Animations --- */
+        .animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .falling-item {
+            position: absolute;
+            top: -10%;
+            font-size: 1.5rem;
+            animation: fall linear;
+            user-select: none;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+        
+        /* Interactive elements */
         .bubble-container { position: relative; width: 100%; height: 55vh; overflow: hidden; border: 1px solid #e2d9c9; border-radius: 1rem; background: rgba(255,255,255,0.2); }
         .bubble {
             position: absolute; display: flex; justify-content: center; align-items: center; border-radius: 50%;
@@ -30,16 +65,16 @@
             background: #fff; padding: 2.5rem; border-radius: 1rem; max-width: 500px; width: 90%;
             position: relative; transform: scale(0.9); transition: transform 0.4s ease;
         }
-        .modal-content.photo-modal { max-width: 90vw; max-height: 90vh; padding: 1rem; } /* Style for photo modal */
+        .modal-content.photo-modal { max-width: 90vw; max-height: 90vh; padding: 1rem; }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .bismillah { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #b89e78; }
         .fab { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; }
         .gallery-img-container { cursor: pointer; }
-        .gallery-img { 
-            transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        }
+        .gallery-img { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .gallery-img-container:hover .gallery-img { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        #loader { border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+        
+        /* Loader */
+        #loader { border: 5px solid #f3f3f3; border-top: 5px solid #9f1239; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8);
@@ -49,20 +84,30 @@
 </head>
 <body class="text-gray-800">
 
+    <!-- NEW: Animation Containers -->
+    <div id="left-animation-container" class="animation-container"></div>
+    <div id="right-animation-container" class="animation-container"></div>
+
+    <!-- NEW: Welcome Banner -->
+    <div id="welcome-banner" class="fixed top-5 left-1/2 -translate-x-1/2 w-11/12 md:w-auto bg-rose-800 text-white p-4 rounded-xl shadow-2xl z-[3000]">
+        <p class="text-center font-semibold text-lg">Welcome to the Wedding Celebration!</p>
+    </div>
+
+    <!-- Main Content -->
     <div id="loading-overlay" class="loading-overlay"><div id="loader"></div></div>
 
     <div class="container mx-auto px-4 py-8">
         <header class="text-center mb-8">
-            <h1 class="header-title text-5xl md:text-6xl text-emerald-800">Sara Samreen </h1>
-            <h1 class="header-title text-5xl md:text-6xl text-emerald-800"> & </h1>
-            <h1 class="header-title text-5xl md:text-6xl text-emerald-800">  Yasir Mohammed</h1>
+            <h1 class="header-title text-5xl md:text-6xl text-rose-800">Sara Samreen </h1>
+            <h1 class="header-title text-5xl md:text-6xl text-rose-800"> & </h1>
+            <h1 class="header-title text-5xl md:text-6xl text-rose-800"> Yasir Mohammed</h1>
             <p class="text-lg text-gray-600 mt-2">Best Wishes | July 05, 2025</p>
             <p class="text-md text-gray-500 mt-4 max-w-2xl mx-auto">Welcome to our virtual guestbook. Share your joy by adding a wish or a cherished photo. All contributions are saved and shared in real-time.</p>
         </header>
         <div id="bubble-container" class="bubble-container w-full max-w-5xl mx-auto"></div>
-        <button id="add-wish-btn" class="fab bg-emerald-600 hover:bg-emerald-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg text-3xl">+</button>
+        <button id="add-wish-btn" class="fab bg-rose-600 hover:bg-rose-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg text-3xl">+</button>
         <section id="art-gallery" class="mt-16 text-center">
-            <h2 class="header-title text-4xl text-emerald-800 mb-4">Humour - Art - Memories</h2>
+            <h2 class="header-title text-4xl text-rose-800 mb-4">Humour - Art - Memories</h2>
             <div class="flex justify-center mb-8">
                 <button id="add-photo-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add a Photo</button>
             </div>
@@ -70,10 +115,10 @@
         </section>
     </div>
 
-    <div id="message-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><div class="text-center"><p class="bismillah mb-4">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p><p id="modal-message" class="text-gray-700 text-lg leading-relaxed mb-6"></p><h3 id="modal-name" class="font-bold text-xl text-emerald-700"></h3><div id="delete-container" class="mt-6"></div></div></div></div>
-    <div id="add-wish-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-emerald-800">Share Your Well Wishes</h2><form id="wish-form"><div class="mb-4"><label for="contributor-name" class="block text-gray-700 text-sm font-bold mb-2">Your Name:</label><input type="text" id="contributor-name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="mb-6"><label for="contributor-message" class="block text-gray-700 text-sm font-bold mb-2">Your Message:</label><textarea id="contributor-message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea></div><div class="text-center"><button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Wish</button></div></form></div></div>
+    <!-- Modals -->
+    <div id="message-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><div class="text-center"><p class="bismillah mb-4">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p><p id="modal-message" class="text-gray-700 text-lg leading-relaxed mb-6"></p><h3 id="modal-name" class="font-bold text-xl text-rose-700"></h3><div id="delete-container" class="mt-6"></div></div></div></div>
+    <div id="add-wish-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-rose-800">Share Your Well Wishes</h2><form id="wish-form"><div class="mb-4"><label for="contributor-name" class="block text-gray-700 text-sm font-bold mb-2">Your Name:</label><input type="text" id="contributor-name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="mb-6"><label for="contributor-message" class="block text-gray-700 text-sm font-bold mb-2">Your Message:</label><textarea id="contributor-message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea></div><div class="text-center"><button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Wish</button></div></form></div></div>
     <div id="add-photo-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-amber-800">Add a Photo to the Gallery</h2><form id="photo-form"><div class="mb-4"><label for="image-url" class="block text-gray-700 text-sm font-bold mb-2">Image URL:</label><input type="url" id="image-url" name="url" placeholder="https://example.com/image.jpg" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="text-center"><button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Photo</button></div></form></div></div>
-    
     <div id="photo-display-modal" class="modal-overlay">
         <div class="modal-content photo-modal shadow-2xl">
             <button class="close-modal absolute top-2 right-4 text-white hover:text-gray-300 text-4xl font-bold">&times;</button>
@@ -81,8 +126,6 @@
             <div id="photo-delete-container" class="mt-4 text-center"></div>
         </div>
     </div>
-    
-    <!-- NEW: Password Prompt Modal -->
     <div id="password-modal" class="modal-overlay">
         <div class="modal-content shadow-2xl">
             <button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
@@ -105,7 +148,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONFIGURATION ---
@@ -121,7 +164,7 @@
         const addWishModal = document.getElementById('add-wish-modal');
         const addPhotoModal = document.getElementById('add-photo-modal');
         const photoDisplayModal = document.getElementById('photo-display-modal');
-        const passwordModal = document.getElementById('password-modal'); // NEW
+        const passwordModal = document.getElementById('password-modal');
         const modalMessageEl = document.getElementById('modal-message');
         const modalNameEl = document.getElementById('modal-name');
         const deleteContainer = document.getElementById('delete-container');
@@ -129,9 +172,14 @@
         const photoDeleteContainer = document.getElementById('photo-delete-container');
         const wishForm = document.getElementById('wish-form');
         const photoForm = document.getElementById('photo-form');
-        const passwordForm = document.getElementById('password-form'); // NEW
-        const passwordError = document.getElementById('password-error'); // NEW
+        const passwordForm = document.getElementById('password-form');
+        const passwordError = document.getElementById('password-error');
         const closeButtons = document.querySelectorAll('.close-modal');
+
+        // NEW: Animation & Banner elements
+        const welcomeBanner = document.getElementById('welcome-banner');
+        const leftAnimationContainer = document.getElementById('left-animation-container');
+        const rightAnimationContainer = document.getElementById('right-animation-container');
 
         const animatedBubbles = new Map();
         const renderedPhotos = new Map();
@@ -140,12 +188,12 @@
         let itemToDelete = null;
         let deleteType = null;
 
-        // --- BUBBLE COLORS ---
+        // --- BUBBLE COLORS (Updated with Red/Rose theme) ---
         const colors = [
-            { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' },
+            { bg: 'bg-rose-100', text: 'text-rose-800', border: 'border-rose-300' },
             { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' },
-            { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300' },
-            { bg: 'bg-rose-100', text: 'text-rose-800', border: 'border-rose-300' }
+            { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300' },
+            { bg: 'bg-pink-100', text: 'text-pink-800', border: 'border-pink-300' }
         ];
         
         // --- FIREBASE SETUP ---
@@ -154,13 +202,13 @@
         async function initializeFirebase() {
             try {
                 const firebaseConfig = {
-                  apiKey: "AIzaSyCxLwp7gixPReoJhcY3gnUuwXarovgYkMw",
-                  authDomain: "ss-virtual-3b84c.firebaseapp.com",
-                  projectId: "ss-virtual-3b84c",
-                  storageBucket: "ss-virtual-3b84c.appspot.com",
-                  messagingSenderId: "722685599054",
-                  appId: "1:722685599054:web:1da8f88d518880f015521f",
-                  measurementId: "G-CV7Q7T2L52"
+                    apiKey: "AIzaSyCxLwp7gixPReoJhcY3gnUuwXarovgYkMw",
+                    authDomain: "ss-virtual-3b84c.firebaseapp.com",
+                    projectId: "ss-virtual-3b84c",
+                    storageBucket: "ss-virtual-3b84c.appspot.com",
+                    messagingSenderId: "722685599054",
+                    appId: "1:722685599054:web:1da8f88d518880f015521f",
+                    measurementId: "G-CV7Q7T2L52"
                 };
                 const appId = 'default-wedding-app-v2';
 
@@ -214,13 +262,13 @@
         function listenForPhotos() {
             onSnapshot(photosCol, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
-                     const photoData = change.doc.data();
-                     const photoId = change.doc.id;
-                     if (change.type === "added" && !renderedPhotos.has(photoId)) createImage(photoData, photoId);
-                     if (change.type === "removed" && renderedPhotos.has(photoId)) {
-                         renderedPhotos.get(photoId).remove();
-                         renderedPhotos.delete(photoId);
-                     }
+                    const photoData = change.doc.data();
+                    const photoId = change.doc.id;
+                    if (change.type === "added" && !renderedPhotos.has(photoId)) createImage(photoData, photoId);
+                    if (change.type === "removed" && renderedPhotos.has(photoId)) {
+                        renderedPhotos.get(photoId).remove();
+                        renderedPhotos.delete(photoId);
+                    }
                 });
             });
         }
@@ -229,7 +277,7 @@
         function requestDelete(id, type) {
             itemToDelete = id;
             deleteType = type;
-            passwordError.classList.add('hidden'); // Hide previous errors
+            passwordError.classList.add('hidden');
             openModal(passwordModal);
         }
 
@@ -353,7 +401,6 @@
             finally { submitBtn.disabled = false; submitBtn.textContent = 'Add Photo'; }
         });
 
-        // NEW: Password form submission handler
         passwordForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const enteredPassword = passwordForm.querySelector('#admin-password').value;
@@ -367,6 +414,7 @@
             passwordForm.reset();
         });
         
+        // --- ANIMATION LOOPS ---
         function animate() {
             let isModalActive = document.querySelector('.modal-overlay.active');
             if (!isModalActive) {
@@ -380,7 +428,50 @@
             requestAnimationFrame(animate);
         }
 
-        initializeFirebase();
+        // --- NEW: SIDE ANIMATIONS & BANNER LOGIC ---
+
+        function createFallingItem(item, container) {
+            const el = document.createElement('div');
+            el.className = 'falling-item';
+            el.innerHTML = item;
+            el.style.left = `${Math.random() * 100}%`;
+            el.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5-10 seconds
+            el.style.animationDelay = `${Math.random() * 5}s`;
+            el.style.opacity = Math.random();
+            el.style.fontSize = `${Math.random() * 1 + 1}rem`; // 1rem - 2rem
+            
+            container.appendChild(el);
+
+            // Remove the element after animation ends to prevent DOM clutter
+            el.addEventListener('animationend', () => {
+                el.remove();
+            });
+        }
+        
+        function startFallingAnimations() {
+             // Create balloons on the left
+            setInterval(() => createFallingItem('🎈', leftAnimationContainer), 800);
+            // Create roses on the right
+            setInterval(() => createFallingItem('🌹', rightAnimationContainer), 800);
+        }
+
+        function handleWelcomeBanner() {
+            setTimeout(() => {
+                welcomeBanner.classList.add('hide');
+                // Optional: remove from DOM after transition
+                setTimeout(() => {
+                    welcomeBanner.style.display = 'none';
+                }, 1000); // Wait for transition to finish
+            }, 2000); // Banner is visible for 2 seconds
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            handleWelcomeBanner();
+            startFallingAnimations();
+            initializeFirebase();
+        });
+
     </script>
 </body>
 </html>

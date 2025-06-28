@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Wishes & Memories for Sarah & ?</title>
+    <title>Wedding Wishes & Memories for Sara Samreen & ?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -30,14 +30,15 @@
             background: #fff; padding: 2.5rem; border-radius: 1rem; max-width: 500px; width: 90%;
             position: relative; transform: scale(0.9); transition: transform 0.4s ease;
         }
+        .modal-content.photo-modal { max-width: 90vw; max-height: 90vh; padding: 1rem; } /* Style for photo modal */
         .modal-overlay.active .modal-content { transform: scale(1); }
         .bismillah { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #b89e78; }
         .fab { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; }
+        .gallery-img-container { cursor: pointer; }
         .gallery-img { 
-            /* MODIFIED: Removed aspect-ratio to allow natural image height */
             transition: transform 0.3s ease, box-shadow 0.3s ease; 
         }
-        .gallery-img:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .gallery-img-container:hover .gallery-img { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         #loader { border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-overlay {
@@ -63,19 +64,50 @@
             <div class="flex justify-center mb-8">
                 <button id="add-photo-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add a Photo</button>
             </div>
-            <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"></div>
+            <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto items-start"></div>
         </section>
     </div>
 
     <div id="message-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><div class="text-center"><p class="bismillah mb-4">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p><p id="modal-message" class="text-gray-700 text-lg leading-relaxed mb-6"></p><h3 id="modal-name" class="font-bold text-xl text-emerald-700"></h3><div id="delete-container" class="mt-6"></div></div></div></div>
     <div id="add-wish-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-emerald-800">Share Your Well Wishes</h2><form id="wish-form"><div class="mb-4"><label for="contributor-name" class="block text-gray-700 text-sm font-bold mb-2">Your Name:</label><input type="text" id="contributor-name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="mb-6"><label for="contributor-message" class="block text-gray-700 text-sm font-bold mb-2">Your Message:</label><textarea id="contributor-message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea></div><div class="text-center"><button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Wish</button></div></form></div></div>
     <div id="add-photo-modal" class="modal-overlay"><div class="modal-content shadow-2xl"><button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button><h2 class="text-2xl font-bold text-center mb-6 text-amber-800">Add a Photo to the Gallery</h2><form id="photo-form"><div class="mb-4"><label for="image-url" class="block text-gray-700 text-sm font-bold mb-2">Image URL:</label><input type="url" id="image-url" name="url" placeholder="https://example.com/image.jpg" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></div><div class="text-center"><button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Add Photo</button></div></form></div></div>
+    
+    <div id="photo-display-modal" class="modal-overlay">
+        <div class="modal-content photo-modal shadow-2xl">
+            <button class="close-modal absolute top-2 right-4 text-white hover:text-gray-300 text-4xl font-bold">&times;</button>
+            <img id="modal-photo-img" src="" class="max-w-full max-h-[80vh] mx-auto rounded-lg">
+            <div id="photo-delete-container" class="mt-4 text-center"></div>
+        </div>
+    </div>
+    
+    <!-- NEW: Password Prompt Modal -->
+    <div id="password-modal" class="modal-overlay">
+        <div class="modal-content shadow-2xl">
+            <button class="close-modal absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-center mb-4 text-gray-800">Admin Action</h2>
+            <p class="text-center text-gray-600 mb-6">Please enter the password to delete this item.</p>
+            <form id="password-form">
+                <div class="mb-4">
+                    <label for="admin-password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+                    <input type="password" id="admin-password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <p id="password-error" class="text-red-500 text-xs italic mt-2 hidden">Incorrect Password.</p>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md">Confirm Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- CONFIGURATION ---
+        const adminPassword = 'th17'; // Hardcoded admin password
 
         // --- ELEMENTS ---
         const loadingOverlay = document.getElementById('loading-overlay');
@@ -86,15 +118,25 @@
         const displayModal = document.getElementById('message-modal');
         const addWishModal = document.getElementById('add-wish-modal');
         const addPhotoModal = document.getElementById('add-photo-modal');
+        const photoDisplayModal = document.getElementById('photo-display-modal');
+        const passwordModal = document.getElementById('password-modal'); // NEW
         const modalMessageEl = document.getElementById('modal-message');
         const modalNameEl = document.getElementById('modal-name');
-        const deleteContainer = document.getElementById('delete-container'); // NEW: For the delete button
+        const deleteContainer = document.getElementById('delete-container');
+        const modalPhotoImg = document.getElementById('modal-photo-img');
+        const photoDeleteContainer = document.getElementById('photo-delete-container');
         const wishForm = document.getElementById('wish-form');
         const photoForm = document.getElementById('photo-form');
+        const passwordForm = document.getElementById('password-form'); // NEW
+        const passwordError = document.getElementById('password-error'); // NEW
         const closeButtons = document.querySelectorAll('.close-modal');
 
         const animatedBubbles = new Map();
-        const renderedPhotos = new Set();
+        const renderedPhotos = new Map();
+
+        // --- STATE VARIABLES ---
+        let itemToDelete = null;
+        let deleteType = null;
 
         // --- BUBBLE COLORS ---
         const colors = [
@@ -109,54 +151,41 @@
         
         async function initializeFirebase() {
             try {
-                // IMPORTANT: For your own project, replace this with your actual Firebase config object.
-                    const firebaseConfig = {
-                    apiKey: "AIzaSyCxLwp7gixPReoJhcY3gnUuwXarovgYkMw",
-                    authDomain: "ss-virtual-3b84c.firebaseapp.com",
-                    projectId: "ss-virtual-3b84c",
-                    storageBucket: "ss-virtual-3b84c.firebasestorage.app",
-                    messagingSenderId: "722685599054",
-                    appId: "1:722685599054:web:1da8f88d518880f015521f",
-                    measurementId: "G-CV7Q7T2L52"
-                    };
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-wedding-app-v2';
+                const firebaseConfig = {
+                  apiKey: "AIzaSyCxLwp7gixPReoJhcY3gnUuwXarovgYkMw",
+                  authDomain: "ss-virtual-3b84c.firebaseapp.com",
+                  projectId: "ss-virtual-3b84c",
+                  storageBucket: "ss-virtual-3b84c.appspot.com",
+                  messagingSenderId: "722685599054",
+                  appId: "1:722685599054:web:1da8f88d518880f015521f",
+                  measurementId: "G-CV7Q7T2L52"
+                };
+                const appId = 'default-wedding-app-v2';
 
                 if (!firebaseConfig.apiKey) {
-                    loadingOverlay.innerHTML = "<h2>Firebase configuration not found. Please set up your own Firebase project.</h2>";
+                    loadingOverlay.innerHTML = "<h2>Firebase configuration not found.</h2>";
                     return;
                 }
                 
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
-                auth = getAuth(app); // Get auth instance
+                auth = getAuth(app); 
 
-                // Listen for auth state changes
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        console.log("User is signed in with UID:", user.uid);
-                        // Once authenticated, define collections and start listeners
                         wishesCol = collection(db, `artifacts/${appId}/public/data/wishes`);
                         photosCol = collection(db, `artifacts/${appId}/public/data/photos`);
                         listenForWishes();
                         listenForPhotos();
                         animate();
-                    } else {
-                        console.log("User is signed out.");
                     }
                 });
 
-                // Authenticate the user
                 try {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                } catch (error) {
-                    console.warn("Custom token sign-in failed with error, falling back to anonymous sign-in.", error);
                     await signInAnonymously(auth);
+                } catch (error) {
+                    console.error("Anonymous sign-in failed", error);
                 }
-
 
             } catch (error) {
                 console.error("Error initializing Firebase:", error);
@@ -164,23 +193,16 @@
             }
         }
 
-
         // --- REAL-TIME LISTENERS ---
         function listenForWishes() {
             onSnapshot(wishesCol, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     const wishData = change.doc.data();
                     const wishId = change.doc.id;
-
-                    if (change.type === "added") {
-                        if (!animatedBubbles.has(wishId)) createBubble(wishData, wishId);
-                    }
-                    // NEW: Handle document removal for real-time deletion
-                    if (change.type === "removed") {
-                        if (animatedBubbles.has(wishId)) {
-                            animatedBubbles.get(wishId).element.remove();
-                            animatedBubbles.delete(wishId);
-                        }
+                    if (change.type === "added" && !animatedBubbles.has(wishId)) createBubble(wishData, wishId);
+                    if (change.type === "removed" && animatedBubbles.has(wishId)) {
+                        animatedBubbles.get(wishId).element.remove();
+                        animatedBubbles.delete(wishId);
                     }
                 });
                 loadingOverlay.style.display = 'none';
@@ -190,25 +212,40 @@
         function listenForPhotos() {
             onSnapshot(photosCol, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
-                     if (change.type === "added") {
-                         const photoData = change.doc.data();
-                         const photoId = change.doc.id;
-                         if (!renderedPhotos.has(photoId)) createImage(photoData.url, photoId);
+                     const photoData = change.doc.data();
+                     const photoId = change.doc.id;
+                     if (change.type === "added" && !renderedPhotos.has(photoId)) createImage(photoData, photoId);
+                     if (change.type === "removed" && renderedPhotos.has(photoId)) {
+                         renderedPhotos.get(photoId).remove();
+                         renderedPhotos.delete(photoId);
                      }
                 });
             });
         }
         
-        // --- NEW: Delete Function ---
-        async function deleteWish(wishId) {
-            const wishRef = doc(db, wishesCol.path, wishId);
+        // --- DELETE FUNCTIONS ---
+        function requestDelete(id, type) {
+            itemToDelete = id;
+            deleteType = type;
+            passwordError.classList.add('hidden'); // Hide previous errors
+            openModal(passwordModal);
+        }
+
+        async function executeDelete() {
+            if (!itemToDelete || !deleteType) return;
+            
+            const collectionRef = deleteType === 'wish' ? wishesCol : photosCol;
+            const itemRef = doc(db, collectionRef.path, itemToDelete);
+
             try {
-                await deleteDoc(wishRef);
-                console.log("Wish deleted successfully");
-                closeModal(displayModal);
+                await deleteDoc(itemRef);
+                const activeModal = document.querySelector('.modal-overlay.active');
+                if (activeModal) closeModal(activeModal);
             } catch (error) {
-                console.error("Error deleting wish:", error);
-                alert("Could not delete the wish. Please try again.");
+                console.error(`Error deleting ${deleteType}:`, error);
+            } finally {
+                itemToDelete = null;
+                deleteType = null;
             }
         }
 
@@ -217,7 +254,6 @@
             const bubble = document.createElement('div');
             const size = Math.random() * (150 - 90) + 90;
             const color = colors[Math.floor(Math.random() * colors.length)];
-
             bubble.className = `bubble font-semibold ${color.bg} ${color.text} border-2 ${color.border}`;
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
@@ -225,50 +261,53 @@
             bubble.style.left = `${Math.random() * (bubbleContainer.offsetWidth - size)}px`;
             bubble.style.top = `${Math.random() * (bubbleContainer.offsetHeight - size)}px`;
             bubble.textContent = msg.name;
-
             setTimeout(() => { bubble.style.opacity = '1'; }, 100);
 
             bubble.addEventListener('click', () => {
                 modalMessageEl.textContent = msg.message;
                 modalNameEl.textContent = `— ${msg.name}`;
-                deleteContainer.innerHTML = ''; // Clear previous delete button
-
-                // NEW: Logic to show delete button
-                const currentUser = auth.currentUser;
-                if (currentUser && currentUser.uid === msg.userId) {
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.textContent = 'Delete My Wish';
-                    deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105';
-                    deleteBtn.onclick = () => deleteWish(id);
-                    deleteContainer.appendChild(deleteBtn);
-                }
-
+                deleteContainer.innerHTML = '';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete Wish';
+                deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg';
+                deleteBtn.onclick = () => requestDelete(id, 'wish');
+                deleteContainer.appendChild(deleteBtn);
+                
                 openModal(displayModal);
             });
-            
             bubbleContainer.appendChild(bubble);
-
             animatedBubbles.set(id, {
                 element: bubble, x: parseFloat(bubble.style.left), y: parseFloat(bubble.style.top),
                 vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, radius: size / 2
             });
         }
 
-        function createImage(url, id) {
-            renderedPhotos.add(id);
+        function createImage(photoData, id) {
             const imgContainer = document.createElement('div');
-            // MODIFIED: Added align-self-start to make grid items align to the top
-            imgContainer.className = 'w-full h-auto bg-gray-200 rounded-lg overflow-hidden shadow-lg self-start';
+            imgContainer.className = 'gallery-img-container w-full h-auto bg-gray-200 rounded-lg overflow-hidden shadow-lg self-start';
             const img = document.createElement('img');
-            img.src = url;
-            // MODIFIED: Removed h-full to allow natural height
+            img.src = photoData.url;
             img.className = 'gallery-img w-full rounded-lg';
             img.alt = 'Wedding Memory';
             img.onerror = () => { img.src = 'https://placehold.co/600x600/cccccc/ffffff?text=Image+Not+Found'; };
             imgContainer.appendChild(img);
-            // MODIFIED: Changed gallery grid to have items aligned to the start
-            galleryGrid.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto items-start';
+
+            imgContainer.addEventListener('click', () => {
+                modalPhotoImg.src = photoData.url;
+                photoDeleteContainer.innerHTML = ''; 
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete Photo';
+                deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg';
+                deleteBtn.onclick = () => requestDelete(id, 'photo');
+                photoDeleteContainer.appendChild(deleteBtn);
+                
+                openModal(photoDisplayModal);
+            });
+
             galleryGrid.appendChild(imgContainer);
+            renderedPhotos.set(id, imgContainer);
         }
 
         function openModal(modal) { modal.classList.add('active'); }
@@ -286,43 +325,44 @@
             e.preventDefault();
             const submitBtn = wishForm.querySelector('button[type="submit"]');
             submitBtn.disabled = true; submitBtn.textContent = 'Adding...';
-
             try {
-                // NEW: Add the userId to the document
                 await addDoc(wishesCol, {
-                    name: wishForm.name.value,
-                    message: wishForm.message.value,
-                    createdAt: serverTimestamp(),
-                    userId: auth.currentUser.uid 
+                    name: wishForm.name.value, message: wishForm.message.value,
+                    createdAt: serverTimestamp(), userId: auth.currentUser.uid 
                 });
                 wishForm.reset();
                 closeModal(addWishModal);
-            } catch (error) {
-                console.error("Error adding wish: ", error);
-            } finally {
-                submitBtn.disabled = false; submitBtn.textContent = 'Add Wish';
-            }
+            } catch (error) { console.error("Error adding wish: ", error); }
+            finally { submitBtn.disabled = false; submitBtn.textContent = 'Add Wish'; }
         });
 
         photoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = photoForm.querySelector('button[type="submit"]');
             submitBtn.disabled = true; submitBtn.textContent = 'Adding...';
-
             try {
-                // NEW: Add userId to photos as well for future moderation
                 await addDoc(photosCol, {
-                    url: photoForm.url.value,
-                    createdAt: serverTimestamp(),
+                    url: photoForm.url.value, createdAt: serverTimestamp(),
                     userId: auth.currentUser.uid
                 });
                 photoForm.reset();
                 closeModal(addPhotoModal);
-            } catch (error) {
-                console.error("Error adding photo: ", error);
-            } finally {
-                submitBtn.disabled = false; submitBtn.textContent = 'Add Photo';
+            } catch (error) { console.error("Error adding photo: ", error); }
+            finally { submitBtn.disabled = false; submitBtn.textContent = 'Add Photo'; }
+        });
+
+        // NEW: Password form submission handler
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const enteredPassword = passwordForm.querySelector('#admin-password').value;
+            if (enteredPassword === adminPassword) {
+                passwordError.classList.add('hidden');
+                closeModal(passwordModal);
+                executeDelete();
+            } else {
+                passwordError.classList.remove('hidden');
             }
+            passwordForm.reset();
         });
         
         function animate() {
